@@ -4,7 +4,7 @@ import { createAttachment, removeAttachment } from "../model/Attachment";
 import { createSubTask, updateSubTask, getAllSubtasksId, removeSubTask } from "../model/SubTask";
 import { Request, Response } from "express";
 import dayjs from "dayjs";
-import { TASK_STATUS, SUBTASK_STATUS, REVERTED_TASK_STATUS, REVERTED_SUBTASK_STATUS, TASK_PRIORITY } from "../typescript/interface/Enums";
+import { TASK_STATUS, REVERTED_TASK_STATUS, REVERTED_SUBTASK_STATUS, TASK_PRIORITY } from "../typescript/interface/Enums";
 import { validateFields } from "../utils/utils";
 import prisma from "../lib/prisma";
 
@@ -44,12 +44,7 @@ export const create = async (req: Request, res: Response) => {
                 )
             }
             for (const subTask of subTasks) {
-                await prisma.subtask.create({
-                    data: {
-                        task_id,
-                        ...subTask
-                    }
-                })
+                await createSubTask({...subTask, task_id})
             }
             return res.json({
                 msg: "Task created successfully!",
