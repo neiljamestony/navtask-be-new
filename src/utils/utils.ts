@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import dayjs = require('dayjs');
+import dayjs from 'dayjs';
 
 dotenv.config();
 
@@ -23,6 +23,17 @@ export const validateHashed = async (input: string, reference: any) =>
 
 export const generateAccessToken = async (payload: object) => {
   return jwt.sign(payload, jwt_secret, { expiresIn: "24h" });
+};
+
+export const convertToDbDate = (value: string) => {
+  const d = dayjs(value, "MM/DD/YYYY");
+  return new Date(
+    Date.UTC(
+      d.year(),
+      d.month(),
+      d.date()
+    )
+  );
 };
 
 export const validateFields = (payload: any) => {

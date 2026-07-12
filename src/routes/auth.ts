@@ -1,5 +1,5 @@
 import express from "express";
-import { login, register, hasAccess, logout, getUserData } from "../controller/AuthController";
+import { login, register, hasAccess, logout, getUserInfo } from "../controller/AuthController";
 import { authenticate } from "../middleware/middleware";
 import passport from "passport";
 
@@ -9,7 +9,7 @@ router.post('/login', login);
 router.post('/register', register);
 router.get('/hasAccess', authenticate, hasAccess)
 router.post('/logout', logout);
-router.get('/getUserData', authenticate, getUserData)
+router.get('/getUserData', authenticate, getUserInfo)
 
 
 // router.get('/google', passport.authenticate("google", {

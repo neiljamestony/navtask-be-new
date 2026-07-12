@@ -39,7 +39,7 @@ CREATE TYPE subtask_status AS ENUM (
 
 -- TASK TABLE
 CREATE TABLE IF NOT EXISTS "NAVTASK".task (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id INTEGER NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT,
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS "NAVTASK".task (
 -- SUBTASK TABLE
 CREATE TABLE IF NOT EXISTS "NAVTASK".subtask (
     id SERIAL PRIMARY KEY,
-    task_id INTEGER NOT NULL,
+    task_id UUID NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT,
     status subtask_status DEFAULT 'not-done',
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS "NAVTASK".subtask (
 
 CREATE TABLE if not exists "NAVTASK".attachments (
     id SERIAL PRIMARY KEY,
-    task_id INTEGER NOT NULL,
+    task_id UUID NOT NULL,
     file_name VARCHAR(255) NOT NULL,
     original_name VARCHAR(255) NOT NULL,
     file_path TEXT NOT NULL,

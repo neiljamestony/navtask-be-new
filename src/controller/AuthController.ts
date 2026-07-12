@@ -1,8 +1,9 @@
 import { generateHash, validateHashed, generateAccessToken, validateFields } from "./../utils/utils";
 import { Request, Response } from "express"
-import { createUser, getUserByUsername, checkUser } from '../model/User';
 import { AuthErrorCode } from "../typescript/interface/UserInterface";
+import { checkUserData, createUser, getUserData } from "../model/User";
 import dotenv from 'dotenv';
+import { PROVIDER_TYPE } from "../typescript/interface/Enums";
 
 dotenv.config();
 
@@ -16,9 +17,9 @@ export const register = async (req: Request, res: Response) => {
         }
 
         const { username, password } = body;
-        const isUserExists = await getUserByUsername(username);
+        const isUserExists = await checkUserData(username);
 
-        if(isUserExists.length){
+        if(isUserExists){
             return res.json({
                 errors: [
                     {
@@ -31,12 +32,18 @@ export const register = async (req: Request, res: Response) => {
             })
         }else{
             const hashedPassword = await generateHash(password);
-            const user = await createUser({ username, password: hashedPassword, provider: "local" });
-            
-            if(Object.keys(user).length){
+            const local_provider = PROVIDER_TYPE["local" as keyof typeof PROVIDER_TYPE];
+            const user = await createUser(username, hashedPassword, local_provider);
+            if(user){
                 return res.json({
                     msg: "Success!",
                     status: 200,
+                    errors: []
+                })
+            }else{
+                return res.json({
+                    msg: "Error: Failed to create an account!",
+                    status: 500,
                     errors: []
                 })
             }
@@ -56,8 +63,9 @@ export const login = async (req: Request, res: Response) => {
             return res.json({errors: errors, msg: AuthErrorCode.UNPROCESSABLE_CONTENT, status: 422 })
         }
 
-        const user = await getUserByUsername(body?.username);
-        if(!user.length){
+        const user = await checkUserData(body?.username);
+
+        if(!user){
              return res.json({ 
                 msg: AuthErrorCode.UNPROCESSABLE_CONTENT, 
                 status: 422,
@@ -69,7 +77,7 @@ export const login = async (req: Request, res: Response) => {
                 ] 
             })
         }else{
-            const isMatch = await validateHashed(body?.password, user[0].password);
+            const isMatch = await validateHashed(body?.password, user.password);
             if(!isMatch){
                 return res.json({ 
                     msg: AuthErrorCode.UNPROCESSABLE_CONTENT, 
@@ -83,8 +91,8 @@ export const login = async (req: Request, res: Response) => {
                 })
             }else{
                 const accessToken = await generateAccessToken({
-                    id: user[0].id,
-                    username: user[0].username
+                    id: user.id,
+                    username: user.username
                 });
                 res.cookie("token", accessToken, {
                     httpOnly: true,
@@ -97,8 +105,8 @@ export const login = async (req: Request, res: Response) => {
                     status: 200, 
                     errors: [],
                     data: {
-                        userId: user[0].id,
-                        username: user[0].username
+                        userId: user.id,
+                        username: user.username
                     }
                 })
             }
@@ -112,37 +120,43 @@ export const login = async (req: Request, res: Response) => {
 export const hasAccess = async (req: Request, res: Response) => {
     try {
         const user = req.user;
-        const userId = user?.id as string;
-        const result = await checkUser(userId);
-        res.json({
-            data: {
-                id: result[0].id,
-                username: result[0].username
-            },
-            errors: [],
-            status: 200,
-            msg: "Authenticated"
-        })
+        const userId = Number(user?.id);
+        const result = await getUserData(userId);
+        if(result){
+            res.json({
+                data: {
+                    id: result.id,
+                    username: result.username
+                },
+                errors: [],
+                status: 200,
+                msg: "Authenticated"
+            })
+        }
     } catch (error) {
         console.error(error instanceof Error ? error.message : error)
         return res.json({ msg: AuthErrorCode.SOMETHING_WENT_WRONG, status: 500, errors: [] })
     }
 }
 
-export const getUserData = async (req: Request, res: Response) => {
+export const getUserInfo = async (req: Request, res: Response) => {
     try {
         const user = req.user;
-        const userId = user?.id as string;
-        const result = await checkUser(userId);
-        res.json({
-            data: {
-                userId: result[0].id,
-                username: result[0].username
-            },
-            errors: [],
-            status: 200,
-            msg: "Success!"
-        })
+        const userId = Number(user?.id);
+        const result = await getUserData(userId);
+
+        if(result){
+            res.json({
+                data: {
+                    userId: result.id,
+                    username: result.username
+                },
+                errors: [],
+                status: 200,
+                msg: "Authenticated"
+            })
+        }
+
     } catch (error) {
         console.error(error instanceof Error ? error.message : error)
        return res.json({ msg: AuthErrorCode.SOMETHING_WENT_WRONG, status: 500, errors: [] })

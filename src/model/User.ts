@@ -1,35 +1,28 @@
-import db from '../config/db';
-import { IUserAuthRequest } from '../typescript/interface/UserInterface';
+import prisma from '../lib/prisma';
+import { provider_type } from '../generated/prisma';
 
-export const getUserByUsername = async (username: string) => {
-    const result = await db.query(
-        `SELECT * FROM "NAVTASK".users
-        WHERE username = $1
-        `,
-        [username]
-    );
-    return result.rows;
+export const getUserData = async (user_id: number) => {
+    return await prisma.users.findUnique({
+        where: {
+            id: user_id
+        }
+    })
 }
 
-export const checkUser = async (user_id: string | number) => {
-    const result = await db.query(
-        `SELECT * FROM "NAVTASK".users
-        WHERE id = $1
-        `,
-        [user_id]
-    );
-    return result.rows;
+export const checkUserData = async (username: string) => {
+    return await prisma.users.findUnique({
+        where: {
+            username: username
+        }
+    })
 }
 
-export const createUser = async (user: IUserAuthRequest) => {
-    const { username, password, provider } = user;
-    const result = await db.query(
-    `
-        INSERT INTO "NAVTASK".users
-        (username, password, provider)
-        VALUES($1, $2, $3)
-        RETURNING *`,
-        [username, password, provider]
-    );
-    return result.rows[0];
+export const createUser = async (username: string, password: string, provider: provider_type) => {
+   return await prisma.users.create({
+        data: {
+            username,
+            password,
+            provider
+        }
+   })
 }

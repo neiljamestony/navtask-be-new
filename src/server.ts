@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import authRoute from './routes/auth';
 import taskRoute from './routes/task';
 import path from 'path';
-import "./config/passport"
+// import "./config/passport"
 import { authenticate } from './middleware/middleware';
 
 dotenv.config();
