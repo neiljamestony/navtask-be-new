@@ -2,11 +2,12 @@ import { createTask, updateTask, removeTask, getTask, getAllTask } from "../mode
 import { getUserData } from "../model/User";
 import { createAttachment, removeAttachment } from "../model/Attachment";
 import { createSubTask, updateSubTask, getAllSubtasksId, removeSubTask } from "../model/SubTask";
+import { AuthErrorCode } from "../typescript/interface/UserInterface";
 import { Request, Response } from "express";
-import dayjs from "dayjs";
 import { TASK_STATUS, REVERTED_TASK_STATUS, REVERTED_SUBTASK_STATUS, TASK_PRIORITY } from "../typescript/interface/Enums";
 import { validateFields } from "../utils/utils";
 import prisma from "../lib/prisma";
+import dayjs from "dayjs";
 
 export const create = async (req: Request, res: Response) => {
     try{
@@ -21,7 +22,7 @@ export const create = async (req: Request, res: Response) => {
         const userExist = await getUserData(userId);
 
         if(errors.length){
-            return res.json({errors: errors, msg: "Unprocessable Content", status: 422 })
+            return res.json({errors: errors, msg: AuthErrorCode.UNPROCESSABLE_CONTENT, status: 422 })
         }
 
         if(!userExist){
@@ -83,7 +84,7 @@ export const update = async (req: Request, res: Response) => {
         });
 
         if(errors.length){
-            return res.json({errors: errors, msg: "Unprocessable Content", status: 422 })
+            return res.json({errors: errors, msg: AuthErrorCode.UNPROCESSABLE_CONTENT, status: 422 })
         }
 
         if(!userExist){

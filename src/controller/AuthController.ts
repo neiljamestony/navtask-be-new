@@ -2,8 +2,8 @@ import { generateHash, validateHashed, generateAccessToken, validateFields } fro
 import { Request, Response } from "express"
 import { AuthErrorCode } from "../typescript/interface/UserInterface";
 import { checkUserData, createUser, getUserData } from "../model/User";
-import dotenv from 'dotenv';
 import { PROVIDER_TYPE } from "../typescript/interface/Enums";
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -27,7 +27,7 @@ export const register = async (req: Request, res: Response) => {
                         error: "Name already exists!"
                     }
                 ],
-                msg: "Unprocessable Content",
+                msg: AuthErrorCode.UNPROCESSABLE_CONTENT,
                 status: 422
             })
         }else{
