@@ -1,0 +1,80 @@
+◇ injected env (7) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+-- CreateSchema
+CREATE SCHEMA IF NOT EXISTS "NAVTASK";
+
+-- CreateEnum
+CREATE TYPE "provider_type" AS ENUM ('local', 'facebook', 'googlefb_and_google');
+
+-- CreateEnum
+CREATE TYPE "subtask_status" AS ENUM ('done', 'not-done');
+
+-- CreateEnum
+CREATE TYPE "task_priority" AS ENUM ('low', 'high', 'critical');
+
+-- CreateEnum
+CREATE TYPE "task_status" AS ENUM ('not-started', 'in-progress', 'completed', 'cancelled');
+
+-- CreateTable
+CREATE TABLE "attachments" (
+    "id" SERIAL NOT NULL,
+    "task_id" UUID NOT NULL,
+    "file_name" VARCHAR(255) NOT NULL,
+    "original_name" VARCHAR(255) NOT NULL,
+    "file_path" TEXT NOT NULL,
+    "mime_type" VARCHAR(100),
+    "file_size" BIGINT,
+    "uploaded_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "attachments_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "subtask" (
+    "id" SERIAL NOT NULL,
+    "task_id" UUID NOT NULL,
+    "title" VARCHAR(255) NOT NULL,
+    "description" TEXT,
+    "status" "subtask_status" DEFAULT 'not-done',
+    "created_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "subtask_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "task" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "user_id" INTEGER NOT NULL,
+    "title" VARCHAR(255) NOT NULL,
+    "description" TEXT,
+    "due_date" DATE,
+    "completed_date" DATE,
+    "priority" "task_priority" DEFAULT 'low',
+    "status" "task_status" DEFAULT 'not-started',
+    "created_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "task_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "users" (
+    "id" SERIAL NOT NULL,
+    "username" VARCHAR(100) NOT NULL,
+    "password" VARCHAR(150) NOT NULL,
+    "provider" "provider_type" DEFAULT 'local',
+    "created_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_username_key" ON "users"("username");
+
+-- AddForeignKey
+ALTER TABLE "attachments" ADD CONSTRAINT "fk_task" FOREIGN KEY ("task_id") REFERENCES "task"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "subtask" ADD CONSTRAINT "fk_task" FOREIGN KEY ("task_id") REFERENCES "task"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "task" ADD CONSTRAINT "fk_user" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
