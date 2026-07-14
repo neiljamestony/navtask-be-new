@@ -32,7 +32,7 @@ CREATE TABLE "NAVTASK"."subtask" (
     "task_id" UUID NOT NULL,
     "title" VARCHAR(255) NOT NULL,
     "description" TEXT,
-    "status" "subtask_status" DEFAULT 'not-done',
+    "status" "NAVTASK"."subtask_status" DEFAULT 'not-done',
     "created_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "subtask_pkey" PRIMARY KEY ("id")
@@ -46,8 +46,8 @@ CREATE TABLE "NAVTASK"."task" (
     "description" TEXT,
     "due_date" DATE,
     "completed_date" DATE,
-    "priority" "task_priority" DEFAULT 'low',
-    "status" "task_status" DEFAULT 'not-started',
+    "priority" "NAVTASK"."task_priority" DEFAULT 'low',
+    "status" "NAVTASK"."task_status" DEFAULT 'not-started',
     "created_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "task_pkey" PRIMARY KEY ("id")
@@ -58,7 +58,7 @@ CREATE TABLE "NAVTASK"."users" (
     "id" SERIAL NOT NULL,
     "username" VARCHAR(100) NOT NULL,
     "password" VARCHAR(150) NOT NULL,
-    "provider" "provider_type" DEFAULT 'local',
+    "provider" "NAVTASK"."provider_type" DEFAULT 'local',
     "created_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
