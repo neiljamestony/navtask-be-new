@@ -38,9 +38,7 @@ export const create = async (req: Request, res: Response) => {
             const task_id = task.id;
             if(files && files.length > 0){
                 await Promise.all(
-                    files.map(async (file) => {
-                        await createAttachment(task_id, file?.filename, file?.originalname, file?.path, file?.mimetype, Number(file?.size))
-                    })
+                    files.map((file) => createAttachment(task_id, file?.filename, file?.originalname, file?.path, file?.mimetype, Number(file?.size)))
                 )
             }
             for (const subTask of subTasks) {
@@ -95,35 +93,21 @@ export const update = async (req: Request, res: Response) => {
         if(task){
             if(files.length > 0){
                 await Promise.all(
-                    files.map(async (file) => {
-                        await createAttachment(task_id, file?.filename, file?.originalname, file?.path, file?.mimetype, Number(file?.size))
-                    })
+                    files.map((file) => createAttachment(task_id, file?.filename, file?.originalname, file?.path, file?.mimetype, Number(file?.size)))
                 )
                 const convertedExistingAttachments = existingAttachments.map((item: { id: number }) => item.id).map(Number);
                 const itemsToRemove = attachmentId.filter((item: number) => !convertedExistingAttachments.includes(item))
                 if(itemsToRemove.length > 0){
-                    await Promise.all(
-                        itemsToRemove.map(async (item: number) => {
-                            await removeAttachment(item);
-                        })
-                    )
+                    await Promise.all(itemsToRemove.map((item: number) => removeAttachment(item)))
                 }
             }else{
                 if(existingAttachments.length < 1){
-                    await Promise.all(
-                        attachmentId.map(async (id: number) => {
-                            await removeAttachment(id);
-                        })
-                    )
+                    await Promise.all(attachmentId.map((id: number) => removeAttachment(id)))
                 }else{
                     const convertedExistingAttachments = existingAttachments.map((item: { id: number }) => item.id).map(Number);
                     const itemsToRemove = attachmentId.filter((item: number) => !convertedExistingAttachments.includes(item))
                     if(itemsToRemove.length > 0){
-                        await Promise.all(
-                            itemsToRemove.map(async (item: { id: number }) => {
-                                await removeAttachment(item.id);
-                            })
-                        )
+                        await Promise.all(itemsToRemove.map((item: { id: number }) => removeAttachment(item.id)))
                     }
                 }
             }
@@ -178,26 +162,27 @@ export const get = async (req: Request, res: Response) => {
         const task = await getTask(id, userId)
         let newResult;
         if(task){
-            const due_date = dayjs(task.due_date).format("YYYY-MM-DD");
-            const created_at = dayjs(task.created_at).format("YYYY-MM-DD");
-            const newAttachments = task.attachments;
-            const attachmentId = newAttachments.length > 0 ? newAttachments.map(item => item.id) : [];
-            const attachments = newAttachments.length > 0 ? newAttachments.map(item => ({
-                id: item.id,
-                url: `${req.protocol}://${req.get("host")}/uploads/${item.file_name}`,
-                name: item.original_name,
-                size: Number(item.file_size),
-                type: item.mime_type,
-                file_name: item.file_name,
-            })) : [];
-            const subtask = task.subtask.length > 0 ? 
-                task.subtask.map(sub => ({
+            newResult = {
+                ...task,
+                status: task.status ? REVERTED_TASK_STATUS[task.status] : task.status,
+                due_date: dayjs(task.due_date).format("YYYY-MM-DD"),
+                created_at: dayjs(task.created_at).format("YYYY-MM-DD"),
+                attachments: task.attachments.map(item => ({
+                    id: item.id,
+                    url: `${req.protocol}://${req.get("host")}/uploads/${item.file_name}`,
+                    name: item.original_name,
+                    size: Number(item.file_size),
+                    type: item.mime_type,
+                    file_name: item.file_name,
+                })),
+                subtask: task.subtask.map(sub => ({
                     ...sub,
                     status: sub.status
                     ? REVERTED_SUBTASK_STATUS[sub.status]
-                    : null
-                })) : [];
-            newResult = {...task, status: task.status ? REVERTED_TASK_STATUS[task.status] : null, due_date, created_at, attachments, attachmentId, subtask }
+                    : sub.status
+                })),
+                attachmentId: task.attachments.map(item => item.id)
+            }
         }else{
             newResult = task
         }
@@ -213,8 +198,9 @@ export const getAll = async (req: Request, res: Response) => {
         const user = req.user;
         const userId = Number(user?.id);
         const tasks = await getAllTask(userId)
+        let newResult;
         if(tasks){
-            const formattedTasks = tasks.map(task => ({
+            newResult = tasks.map(task => ({
                 ...task,
                 status: task.status ? REVERTED_TASK_STATUS[task.status] : null,
                 subtask: task.subtask.map(sub => ({
@@ -228,8 +214,10 @@ export const getAll = async (req: Request, res: Response) => {
                     file_size: att.file_size ? Number(att.file_size) : null,
                 })),
             }));
-            res.json(formattedTasks)
+        }else{
+            newResult = tasks;
         }
+        res.json(newResult)
     }catch(error: unknown){
         console.error(error instanceof Error ? error.message : error)
         return res.status(500).json({ msg: "Something went wrong" })
@@ -250,7 +238,7 @@ export const remove = async (req: Request, res: Response) => {
             })
         }else{
             return res.json({
-                msg: "Errror: Failed to remove task!",
+                msg: "Error: Failed to remove task!",
                 status: 500
             })
         }
