@@ -2,19 +2,19 @@
 CREATE SCHEMA IF NOT EXISTS "NAVTASK";
 
 -- CreateEnum
-CREATE TYPE "provider_type" AS ENUM ('local', 'facebook', 'googlefb_and_google');
+CREATE TYPE "NAVTASK"."provider_type" AS ENUM ('local', 'facebook', 'googlefb_and_google');
 
 -- CreateEnum
-CREATE TYPE "subtask_status" AS ENUM ('done', 'not-done');
+CREATE TYPE "NAVTASK"."subtask_status" AS ENUM ('done', 'not-done');
 
 -- CreateEnum
-CREATE TYPE "task_priority" AS ENUM ('low', 'high', 'critical');
+CREATE TYPE "NAVTASK"."task_priority" AS ENUM ('low', 'high', 'critical');
 
 -- CreateEnum
-CREATE TYPE "task_status" AS ENUM ('not-started', 'in-progress', 'completed', 'cancelled');
+CREATE TYPE "NAVTASK"."task_status" AS ENUM ('not-started', 'in-progress', 'completed', 'cancelled');
 
 -- CreateTable
-CREATE TABLE "attachments" (
+CREATE TABLE "NAVTASK"."attachments" (
     "id" SERIAL NOT NULL,
     "task_id" UUID NOT NULL,
     "file_name" VARCHAR(255) NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE "attachments" (
 );
 
 -- CreateTable
-CREATE TABLE "subtask" (
+CREATE TABLE "NAVTASK"."subtask" (
     "id" SERIAL NOT NULL,
     "task_id" UUID NOT NULL,
     "title" VARCHAR(255) NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE "subtask" (
 );
 
 -- CreateTable
-CREATE TABLE "task" (
+CREATE TABLE "NAVTASK"."task" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "user_id" INTEGER NOT NULL,
     "title" VARCHAR(255) NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE "task" (
 );
 
 -- CreateTable
-CREATE TABLE "users" (
+CREATE TABLE "NAVTASK"."users" (
     "id" SERIAL NOT NULL,
     "username" VARCHAR(100) NOT NULL,
     "password" VARCHAR(150) NOT NULL,
