@@ -26,3 +26,7 @@ export const createUser = async (username: string, password: string, provider: p
         }
    })
 }
+
+export const getAllUser = async () => {
+    return await prisma.users.findMany()
+}

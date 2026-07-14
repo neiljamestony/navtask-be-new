@@ -1,7 +1,7 @@
 import { generateHash, validateHashed, generateAccessToken, validateFields } from "./../utils/utils";
 import { Request, Response } from "express"
 import { AuthErrorCode } from "../typescript/interface/UserInterface";
-import { checkUserData, createUser, getUserData } from "../model/User";
+import { checkUserData, createUser, getAllUser, getUserData } from "../model/User";
 import { PROVIDER_TYPE } from "../typescript/interface/Enums";
 import dotenv from 'dotenv';
 
@@ -163,6 +163,15 @@ export const getUserInfo = async (req: Request, res: Response) => {
     }
 }
 
+export const checkDbConnection = async (req: Request, res: Response) => {
+    try {
+        const result = await getAllUser();
+        res.json(result)
+    } catch (error) {
+    console.error(error instanceof Error ? error.message : error)
+       return res.json({ msg: AuthErrorCode.SOMETHING_WENT_WRONG, status: 500, errors: [] })
+    }
+}
 // export const google = async (req: Request, res: Response) => {
 //     try {
 //         return res.json({
