@@ -1,5 +1,4 @@
--- CreateSchema
-CREATE SCHEMA IF NOT EXISTS "NAVTASK";
+CREATE SCHEMA if not EXISTS "NAVTASK";
 
 -- CreateEnum
 CREATE TYPE "NAVTASK"."provider_type" AS ENUM ('local', 'facebook', 'googlefb_and_google');
@@ -76,4 +75,3 @@ ALTER TABLE "subtask" ADD CONSTRAINT "fk_task" FOREIGN KEY ("task_id") REFERENCE
 
 -- AddForeignKey
 ALTER TABLE "task" ADD CONSTRAINT "fk_user" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
-
