@@ -9,7 +9,8 @@
     "start": "node dist/server.js",
     "build": "npm run generate && tsc && cp -R src/generated/prisma/. dist/generated/prisma/",
     "server": "nodemon --exec ts-node --files src/server.ts",
-    "dev": "concurrently \"npm run server\""
+    "dev": "concurrently \"npm run server\"",
+    "prod-build": "npm install --include=dev && npx prisma migrate deploy && npm run build"
   },
   "keywords": [],
   "author": "",
