@@ -5,7 +5,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  schemas  = ["NAVTASK"]
 }
 
 model attachments {
@@ -18,8 +17,6 @@ model attachments {
   file_size     BigInt?
   uploaded_at   DateTime? @default(now()) @db.Timestamp(6)
   task          task      @relation(fields: [task_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_task")
-
-  @@schema("NAVTASK")
 }
 
 model subtask {
@@ -30,8 +27,6 @@ model subtask {
   status      subtask_status? @default(not_done)
   created_at  DateTime?       @default(now()) @db.Timestamp(6)
   task        task            @relation(fields: [task_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_task")
-
-  @@schema("NAVTASK")
 }
 
 model task {
@@ -47,8 +42,6 @@ model task {
   attachments    attachments[]
   subtask        subtask[]
   users          users          @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_user")
-
-  @@schema("NAVTASK")
 }
 
 model users {
@@ -58,31 +51,23 @@ model users {
   provider   provider_type? @default(local)
   created_at DateTime?      @default(now()) @db.Timestamp(6)
   task       task[]
-
-  @@schema("NAVTASK")
 }
 
 enum provider_type {
   local
   facebook
   googlefb_and_google
-
-  @@schema("NAVTASK")
 }
 
 enum subtask_status {
   done
   not_done @map("not-done")
-
-  @@schema("NAVTASK")
 }
 
 enum task_priority {
   low
   high
   critical
-
-  @@schema("NAVTASK")
 }
 
 enum task_status {
@@ -90,6 +75,4 @@ enum task_status {
   in_progress @map("in-progress")
   completed
   cancelled
-
-  @@schema("NAVTASK")
 }
