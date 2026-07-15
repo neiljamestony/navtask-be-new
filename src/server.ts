@@ -12,11 +12,12 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 const uploadDir = path.join(process.cwd(), "public", "uploads");
+const allowedOrigin = process.env.CLIENT_URL?.replace(/\/$/, "");
 
 app.use(cookieParser());
-console.log(process.env.CLIENT_URL)
+console.log(process.env.CLIENT_URL?.replace(/\/$/, ""))
 app.use(cors({
-  origin: process.env.CLIENT_URL,
+  origin: allowedOrigin,
   credentials: true
 }));
 app.use(express.json());
