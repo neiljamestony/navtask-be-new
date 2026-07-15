@@ -15,7 +15,6 @@ const uploadDir = path.join(process.cwd(), "public", "uploads");
 const allowedOrigin = process.env.CLIENT_URL?.replace(/\/$/, "");
 
 app.use(cookieParser());
-console.log(process.env.CLIENT_URL?.replace(/\/$/, ""))
 app.use(cors({
   origin: allowedOrigin,
   credentials: true
