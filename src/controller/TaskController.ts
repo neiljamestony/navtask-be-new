@@ -6,6 +6,7 @@ import { AuthErrorCode } from "../typescript/interface/UserInterface";
 import { Request, Response } from "express";
 import { TASK_STATUS, REVERTED_TASK_STATUS, REVERTED_SUBTASK_STATUS, TASK_PRIORITY } from "../typescript/interface/Enums";
 import { validateFields } from "../utils/utils";
+import { v2 as cloudinary } from 'cloudinary'
 import dayjs from "dayjs";
 
 export const create = async (req: Request, res: Response) => {
@@ -38,7 +39,10 @@ export const create = async (req: Request, res: Response) => {
             const task_id = task.id;
             if(files && files.length > 0){
                 await Promise.all(
-                    files.map((file) => createAttachment(task_id, file?.filename, file?.originalname, file?.path, file?.mimetype, Number(file?.size)))
+                    files.map(async (file) => {
+                        const fileResult = await cloudinary.uploader.upload(file.path);
+                        createAttachment(task_id, file?.filename, file?.originalname, fileResult.secure_url, file?.mimetype, Number(file?.size))
+                    })
                 )
             }
             for (const subTask of subTasks) {
@@ -93,7 +97,10 @@ export const update = async (req: Request, res: Response) => {
         if(task){
             if(files.length > 0){
                 await Promise.all(
-                    files.map((file) => createAttachment(task_id, file?.filename, file?.originalname, file?.path, file?.mimetype, Number(file?.size)))
+                    files.map(async (file) => {
+                        const fileResult = await cloudinary.uploader.upload(file.path);
+                        createAttachment(task_id, file?.filename, file?.originalname, fileResult.secure_url, file?.mimetype, Number(file?.size))
+                    })
                 )
                 const convertedExistingAttachments = existingAttachments.map((item: { id: number }) => item.id).map(Number);
                 const itemsToRemove = attachmentId.filter((item: number) => !convertedExistingAttachments.includes(item))
@@ -169,7 +176,7 @@ export const get = async (req: Request, res: Response) => {
                 created_at: dayjs(task.created_at).format("YYYY-MM-DD"),
                 attachments: task.attachments.map(item => ({
                     id: item.id,
-                    url: `${req.protocol}://${req.get("host")}/uploads/${item.file_name}`,
+                    url: item.file_path,
                     name: item.original_name,
                     size: Number(item.file_size),
                     type: item.mime_type,
