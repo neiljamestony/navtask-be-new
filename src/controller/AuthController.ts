@@ -287,8 +287,8 @@ export const logout = async (req: Request, res: Response) => {
 
         res.clearCookie('token', {
             httpOnly: true,
-            secure: false,
-            sameSite: 'lax'
+            secure: true,
+            sameSite: 'none'
         });
 
         return res.json({
