@@ -172,115 +172,147 @@ export const checkDbConnection = async (req: Request, res: Response) => {
        return res.json({ msg: AuthErrorCode.SOMETHING_WENT_WRONG, status: 500, errors: [] })
     }
 }
-// export const google = async (req: Request, res: Response) => {
-//     try {
-//         return res.json({
-//             msg: "Success",
-//             status: 200
-//         })
-//     } catch (error) {
-//         console.error(error instanceof Error ? error.message : error)
-//         return res.json({ msg: AuthErrorCode.SOMETHING_WENT_WRONG, status: 500, errors: [] })
-//     }
-// }
+export const google = async (req: Request, res: Response) => {
+    try {
+        return res.json({
+            msg: "Success",
+            status: 200
+        })
+    } catch (error) {
+        console.error(error instanceof Error ? error.message : error)
+        return res.json({ msg: AuthErrorCode.SOMETHING_WENT_WRONG, status: 500, errors: [] })
+    }
+}
 
-// export const googleCallback = async (req: Request, res: Response) => {
-//     try {
-//         const request = req.user;
-//         const email = request?.email as string;
-//         const isUserExists = await getUserByUsername(email);
-//         let user;
+export const googleCallback = async (req: Request, res: Response) => {
+    try {
+        const request = req.user;
+        const flow = req.query.state;
+        const email = request?.email as string;
+        const isUserExists = await checkUserData(email);
+
+        if(flow === "/register") {
+            if(isUserExists){
+                return res.redirect(`http://localhost:5173/login?status=DATA_EXISTS`)
+            }else{
+                const local_provider = PROVIDER_TYPE["googlefb_and_google" as keyof typeof PROVIDER_TYPE];
+                const user = await createUser(email, "", local_provider);
+
+                const accessToken = await generateAccessToken({
+                    id: user.id,
+                    username: email
+                });
+
+                res.cookie("token", accessToken, {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "none",
+                    maxAge: 24 * 60 * 60 * 1000
+                });
+
+                return res.redirect(`http://localhost:5173/login?status=SUCCESS&userId=${user.id}&username=${user.username}`)
+            }
+        }
+
+        if(flow === "/login"){
+            if(!isUserExists){
+                return res.redirect(`http://localhost:5173/login?status=ACCOUNT_NOT_FOUND`)
+            }else{
+                const user = await checkUserData(email);
+                if(user){
+                    const accessToken = await generateAccessToken({
+                        id: user.id,
+                        username: email
+                    });
+                    res.cookie("token", accessToken, {
+                        httpOnly: true,
+                        secure: true,
+                        sameSite: "none",
+                        maxAge: 24 * 60 * 60 * 1000
+                    });
+                    return res.redirect(`http://localhost:5173/login?status=SUCCESS&userId=${user.id}&username=${user.username}`)
+                }else{
+                    return res.redirect(`http://localhost:5173/login?status=ACCOUNT_NOT_FOUND`)
+                }
+            }
+        }
         
-//         if(!isUserExists.length){
-//             user = await createUser({ username: email, provider: "google" });
-//         }else{
-//             user = isUserExists;
-//         }
+    } catch (error) {
+        console.error(error instanceof Error ? error.message : error)
+        return res.json({ msg: AuthErrorCode.SOMETHING_WENT_WRONG, status: 500, errors: [] })
+    }
+}
 
-//         const accessToken = generateAccessToken({
-//             id: user[0].id,
-//             username: user[0].username
-//         });
+export const facebook = async (req: Request, res: Response) => {
+    try {
+        res.json({
+            msg: "Success",
+            status: 200
+        })
+    } catch (error) {
+        console.error(error instanceof Error ? error.message : error)
+        return res.json({ msg: AuthErrorCode.SOMETHING_WENT_WRONG, status: 500, errors: [] })
+    }
+}
 
-//     
-//         res.cookie("token", accessToken, {
-//             httpOnly: true,
-//             secure: true,
-//             sameSite: "lax",
-//             maxAge: 15 * 60 * 1000,
-//         });
+export const facebookCallback = async (req: Request, res: Response) => {
+    try {
+        const request = req.user;
+        const flow = req.query.state;
+        const email = request?.email as string;
+        const isUserExists = await checkUserData(email);
 
-//         return res.redirect(`http://localhost:5173/register?status=SUCCESS`)
+        if(flow === "/register") {
+            if(isUserExists){
+                return res.redirect(`http://localhost:5173/login?status=DATA_EXISTS`)
+            }else{
+                const local_provider = PROVIDER_TYPE["facebook" as keyof typeof PROVIDER_TYPE];
+                const user = await createUser(email, "", local_provider);
 
-//     } catch (error) {
-//         console.error(error instanceof Error ? error.message : error)
-//         return res.json({ msg: AuthErrorCode.SOMETHING_WENT_WRONG, status: 500, errors: [] })
-//     }
-// }
+                const accessToken = await generateAccessToken({
+                    id: user.id,
+                    username: email
+                });
 
-// export const loginUsingGoogle = async (req: Request, res: Response) => {
-//     try{
+                res.cookie("token", accessToken, {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "none",
+                    maxAge: 24 * 60 * 60 * 1000
+                });
 
-//     }catch(error){
-//         console.error(error instanceof Error ? error.message : error)
-//         return res.json({ msg: AuthErrorCode.SOMETHING_WENT_WRONG, status: 500, errors: [] })
-//     }
-// }
+                return res.redirect(`http://localhost:5173/login?status=SUCCESS&userId=${user.id}&username=${user.username}`)
+            }
+        }
 
-// export const facebook = async (req: Request, res: Response) => {
-//     try {
-//         res.json({
-//             msg: "Success",
-//             status: 200
-//         })
-//     } catch (error) {
-//         console.error(error instanceof Error ? error.message : error)
-//         return res.json({ msg: AuthErrorCode.SOMETHING_WENT_WRONG, status: 500, errors: [] })
-//     }
-// }
-
-// export const facebookCallback = async (req: Request, res: Response) => {
-//     try {
-//         const request = req.user;
-//         const email = request?.email as string;
-//         const isUserExists = await getUserByUsername(email);
-
-//         let user;
+        if(flow === "/login"){
+            if(!isUserExists){
+                return res.redirect(`http://localhost:5173/login?status=ACCOUNT_NOT_FOUND`)
+            }else{
+                const user = await checkUserData(email);
+                if(user){
+                    const accessToken = await generateAccessToken({
+                        id: user.id,
+                        username: email
+                    });
+                    res.cookie("token", accessToken, {
+                        httpOnly: true,
+                        secure: true,
+                        sameSite: "none",
+                        maxAge: 24 * 60 * 60 * 1000
+                    });
+                    return res.redirect(`http://localhost:5173/login?status=SUCCESS&userId=${user.id}&username=${user.username}`)
+                }else{
+                    return res.redirect(`http://localhost:5173/login?status=ACCOUNT_NOT_FOUND`)
+                }
+            }
+        }
         
-//         if(!isUserExists.length){
-//             user = await createUser({ username: email, provider: "facebook" });
-//         }else{
-//             user = isUserExists;
-//         }
-
-//         const accessToken = generateAccessToken({
-//             id: user[0].id,
-//             username: user[0].username
-//         });
-
-//         res.cookie("token", accessToken, {
-//             httpOnly: false,
-//             secure: false,
-//             sameSite: "lax",
-//             maxAge: 15 * 60 * 1000
-//         });
-
-//         return res.redirect(`http://localhost:5173/register?status=SUCCESS`)
-
-//     } catch (error) {
-//         console.error(error instanceof Error ? error.message : error)
-//         return res.json({ msg: AuthErrorCode.SOMETHING_WENT_WRONG, status: 500, errors: [] })
-//     }
-// }
-
-// export const loginUsingFacebook = async (req: Request, res: Response) => {
-//     try{
-
-//     }catch(error){
-//         console.error(error instanceof Error ? error.message : error)
-//         return res.json({ msg: AuthErrorCode.SOMETHING_WENT_WRONG, status: 500, errors: [] })
-//     }
-// }
+    } catch (error) {
+        console.error(error instanceof Error ? error.message : error)
+        return res.json({ msg: AuthErrorCode.SOMETHING_WENT_WRONG, status: 500, errors: [] })
+    }
+}
 
 export const logout = async (req: Request, res: Response) => {
     try {
