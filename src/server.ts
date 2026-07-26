@@ -6,7 +6,7 @@ import authRoute from './routes/auth';
 import taskRoute from './routes/task';
 import path from 'path';
 import { v2 as cloudinary } from 'cloudinary'
-// import "./config/passport"
+import "./config/passport"
 import { authenticate } from './middleware/middleware';
 
 dotenv.config();
