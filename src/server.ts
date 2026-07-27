@@ -27,6 +27,8 @@ app.use(cors({
   origin: allowedOrigin,
   credentials: true
 }));
+
+console.log(allowedOrigin)
 app.use(express.json());
 
 app.use("/uploads",
