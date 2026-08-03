@@ -5,14 +5,14 @@ import dotenv from 'dotenv'
 
 dotenv.config();
 
+const PROD_CALLBACK_URL = process.env.PROD_CALLBACK_URL?.replace(/\/$/, "");
+
 passport.use(
-
   new FacebookStrategy(
-
     {
       clientID: process.env.FACEBOOK_APP_ID!,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
-      callbackURL: `${process.env.PROD_CALLBACK_URL}/auth/facebook/callback`,
+      callbackURL: `${PROD_CALLBACK_URL}/auth/facebook/callback`,
       profileFields: ["id", "displayName", "emails"],
     },
 
@@ -34,7 +34,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      callbackURL: `${process.env.PROD_CALLBACK_URL}/auth/google/callback`,
+      callbackURL: `${PROD_CALLBACK_URL}/auth/google/callback`,
     },
     async (accessToken, refreshToken, profile, done) => {
       const user = {
