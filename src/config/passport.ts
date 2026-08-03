@@ -18,7 +18,7 @@ passport.use(
 
     async (accessToken, refreshToken, profile, done) => {
       const user = {
-        googleId: profile.id,
+        passportId: profile.id,
         email: profile.emails?.[0].value,
         name: profile.displayName,
         id: "",
@@ -38,7 +38,7 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       const user = {
-        googleId: profile.id,
+        passportId: profile.id,
         email: profile.emails?.[0].value,
         name: profile.displayName,
         id: "",

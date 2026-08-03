@@ -190,10 +190,11 @@ export const googleCallback = async (req: Request, res: Response) => {
         const flow = req.query.state;
         const email = request?.email as string;
         const isUserExists = await checkUserData(email);
+        const PROD_CALLBACK_URL = process.env.CLIENT_URL?.replace(/\/$/, "");
 
         if(flow === "/register") {
             if(isUserExists){
-                return res.redirect(`${process.env.CLIENT_URL}/login?status=DATA_EXISTS`)
+                return res.redirect(`${PROD_CALLBACK_URL}/login?status=DATA_EXISTS`)
             }else{
                 const local_provider = PROVIDER_TYPE["googlefb_and_google" as keyof typeof PROVIDER_TYPE];
                 const user = await createUser(email, "", local_provider);
@@ -210,13 +211,13 @@ export const googleCallback = async (req: Request, res: Response) => {
                     maxAge: 24 * 60 * 60 * 1000
                 });
 
-                return res.redirect(`${process.env.CLIENT_URL}/login?status=SUCCESS&userId=${user.id}&username=${user.username}`)
+                return res.redirect(`${PROD_CALLBACK_URL}/login?status=SUCCESS&userId=${user.id}&username=${user.username}`)
             }
         }
 
         if(flow === "/login"){
             if(!isUserExists){
-                return res.redirect(`${process.env.CLIENT_URL}/login?status=ACCOUNT_NOT_FOUND`)
+                return res.redirect(`${PROD_CALLBACK_URL}/login?status=ACCOUNT_NOT_FOUND`)
             }else{
                 const user = await checkUserData(email);
                 if(user){
@@ -230,9 +231,9 @@ export const googleCallback = async (req: Request, res: Response) => {
                         sameSite: "none",
                         maxAge: 24 * 60 * 60 * 1000
                     });
-                    return res.redirect(`${process.env.CLIENT_URL}/login?status=SUCCESS&userId=${user.id}&username=${user.username}`)
+                    return res.redirect(`${PROD_CALLBACK_URL}/login?status=SUCCESS&userId=${user.id}&username=${user.username}`)
                 }else{
-                    return res.redirect(`${process.env.CLIENT_URL}/login?status=ACCOUNT_NOT_FOUND`)
+                    return res.redirect(`${PROD_CALLBACK_URL}/login?status=ACCOUNT_NOT_FOUND`)
                 }
             }
         }
@@ -261,10 +262,11 @@ export const facebookCallback = async (req: Request, res: Response) => {
         const flow = req.query.state;
         const email = request?.email as string;
         const isUserExists = await checkUserData(email);
+        const PROD_CALLBACK_URL = process.env.CLIENT_URL?.replace(/\/$/, "");
 
         if(flow === "/register") {
             if(isUserExists){
-                return res.redirect(`${process.env.CLIENT_URL}/login?status=DATA_EXISTS`)
+                return res.redirect(`${PROD_CALLBACK_URL}/login?status=DATA_EXISTS`)
             }else{
                 const local_provider = PROVIDER_TYPE["facebook" as keyof typeof PROVIDER_TYPE];
                 const user = await createUser(email, "", local_provider);
@@ -281,13 +283,13 @@ export const facebookCallback = async (req: Request, res: Response) => {
                     maxAge: 24 * 60 * 60 * 1000
                 });
 
-                return res.redirect(`${process.env.CLIENT_URL}/login?status=SUCCESS&userId=${user.id}&username=${user.username}`)
+                return res.redirect(`${PROD_CALLBACK_URL}/login?status=SUCCESS&userId=${user.id}&username=${user.username}`)
             }
         }
 
         if(flow === "/login"){
             if(!isUserExists){
-                return res.redirect(`${process.env.CLIENT_URL}/login?status=ACCOUNT_NOT_FOUND`)
+                return res.redirect(`${PROD_CALLBACK_URL}/login?status=ACCOUNT_NOT_FOUND`)
             }else{
                 const user = await checkUserData(email);
                 if(user){
@@ -301,9 +303,9 @@ export const facebookCallback = async (req: Request, res: Response) => {
                         sameSite: "none",
                         maxAge: 24 * 60 * 60 * 1000
                     });
-                    return res.redirect(`${process.env.CLIENT_URL}/login?status=SUCCESS&userId=${user.id}&username=${user.username}`)
+                    return res.redirect(`${PROD_CALLBACK_URL}/login?status=SUCCESS&userId=${user.id}&username=${user.username}`)
                 }else{
-                    return res.redirect(`${process.env.CLIENT_URL}/login?status=ACCOUNT_NOT_FOUND`)
+                    return res.redirect(`${PROD_CALLBACK_URL}/login?status=ACCOUNT_NOT_FOUND`)
                 }
             }
         }

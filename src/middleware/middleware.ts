@@ -26,7 +26,6 @@ export const authenticate = async (
         status: 401
       });
     }
-    console.log(token, "token")
     const decoded = jwt.verify(token, secret);
     req.user = decoded as UserPayload;
     next();
