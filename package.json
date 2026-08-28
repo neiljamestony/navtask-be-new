@@ -10,7 +10,9 @@
     "build": "npm run generate && tsc && cp -R src/generated/prisma/. dist/generated/prisma/",
     "server": "nodemon --exec ts-node --files src/server.ts",
     "dev": "concurrently \"npm run server\"",
-    "prod-build": "npm install --include=dev && npx prisma migrate deploy && npm run build"
+    "prod-build": "npm install --include=dev && npx prisma migrate deploy && npm run build",
+    "migrate-schema-dev": "npx prisma migrate dev --name init_navtask --create-only",
+    "db-push-dev": "npx prisma db push"
   },
   "keywords": [],
   "author": "",
