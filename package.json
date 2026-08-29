@@ -4,21 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "generate": "prisma generate",
     "test": "echo \"Error: no test specified\" && exit 1",
-
+    "generate": "prisma generate",
     "build": "npm run generate && tsc && cp -R src/generated/prisma/. dist/generated/prisma/",
     "start": "node dist/server.js",
-    "start-migrate": "npm run migrate:deploy && node dist/server.js",
     "server": "nodemon --exec ts-node --files src/server.ts",
     "dev": "concurrently \"npm run server\"",
-
     "prod-build": "npm install && npm run build",
-
     "migrate": "npx prisma migrate dev",
     "migrate:deploy": "npx prisma migrate deploy",
-
-    "drop-schema-dev": "npx prisma migrate reset --force",
+    "drop-schema": "npx prisma migrate reset --force",
     "db-push-dev": "npx prisma db push"
   },
   "keywords": [],
