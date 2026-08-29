@@ -11,9 +11,10 @@
     "server": "nodemon --exec ts-node --files src/server.ts",
     "dev": "concurrently \"npm run server\"",
     "prod-build": "npm install && npm run build",
-    "migrate": "npx prisma migrate dev",
-    "migrate:deploy": "npx prisma migrate deploy",
+    "migrate:dev": "npx prisma migrate dev --name",
     "drop-schema": "npx prisma migrate reset --force",
+    "migrate:deploy": "npx prisma migrate deploy",
+    "applied-latest-migration": "npx prisma migrate resolve --applied $(ls -1 prisma/migrations | sort | tail -n 1)",
     "db-push-dev": "npx prisma db push"
   },
   "keywords": [],
