@@ -12,9 +12,6 @@ export const createSubTask = async (subtask: { title: string, status: subtask_st
     })
 }
 
-export const getAllSubTask = async (task_id: string) => {
-}
-
 export const getAllSubtasksId = async (task_id: string) => {
     return await prisma.subtask.findMany({
         where: {
