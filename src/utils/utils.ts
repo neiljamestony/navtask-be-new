@@ -46,12 +46,12 @@ export const validateFields = (payload: any) => {
     const due_date = field === "due_date" && payload[field];
     const regex = /^[A-Za-z0-9 !#()_-]+$/;
     const isPastDate = dayjs(due_date).isBefore(dayjs(), 'day');
-    const TITLE_MAX_LENGTH = 25;
+    const TITLE_MAX_LENGTH = 100;
     const DESC_MAX_LENGTH = 300;
 
     if(field === "password"){
       if(password === "" || password === " "){
-        errors.push({key: field, error: `${field} is required!`})
+        errors.push({key: field, error: `This field is required!`})
       }
       if(password.includes(username)){
         errors.push({key: field, error: `Cannot contain your name or email!`})
@@ -65,7 +65,7 @@ export const validateFields = (payload: any) => {
     }
     if(field === "username"){
       if(username === "" || username === " "){
-        errors.push({key: field, error: `${field} is required!`})
+        errors.push({key: field, error: `This field is required!`})
       }
       if(!regex.test(username)){
         errors.push({key: field, error: `Invalid Username!`})

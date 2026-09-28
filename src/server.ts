@@ -32,7 +32,7 @@ console.log(allowedOrigin)
 app.use(express.json());
 
 app.use("/uploads",
-   express.static(uploadDir)
+  express.static(uploadDir)
 )
 app.use('/auth', authRoute);
 app.use('/task', authenticate, taskRoute);
