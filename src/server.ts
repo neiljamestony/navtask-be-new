@@ -8,12 +8,23 @@ import path from 'path';
 import { v2 as cloudinary } from 'cloudinary'
 import "./config/passport"
 import { authenticate } from './middleware/middleware';
+import rateLimit from 'express-rate-limit';
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 const uploadDir = path.join(process.cwd(), "public", "uploads");
 const allowedOrigin = process.env.CLIENT_URL?.replace(/\/$/, "");
+
+const appLimitter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    error: "Too many requests, please try again after 15 minutes"
+  }
+})
 
 app.use(cookieParser());
 
@@ -34,8 +45,8 @@ app.use(express.json());
 app.use("/uploads",
   express.static(uploadDir)
 )
-app.use('/auth', authRoute);
-app.use('/task', authenticate, taskRoute);
+app.use('/auth', appLimitter, authRoute);
+app.use('/task', appLimitter, authenticate, taskRoute);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
