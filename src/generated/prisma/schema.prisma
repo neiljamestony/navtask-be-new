@@ -57,6 +57,7 @@ model users {
   password   String         @db.VarChar(150)
   provider   provider_type? @default(local)
   created_at DateTime?      @default(now()) @db.Timestamp(6)
+  user_type  user_type?     @default(user)
   task       task[]
 
   @@schema("NAVTASK")
@@ -90,6 +91,13 @@ enum task_status {
   in_progress @map("in-progress")
   completed
   cancelled
+
+  @@schema("NAVTASK")
+}
+
+enum user_type {
+  admin
+  user
 
   @@schema("NAVTASK")
 }

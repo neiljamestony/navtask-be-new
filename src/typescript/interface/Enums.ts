@@ -1,4 +1,4 @@
-import { task_status, subtask_status, task_priority, provider_type } from "../../generated/prisma"
+import { task_status, subtask_status, task_priority, provider_type, user_type } from "../../generated/prisma"
 
 export const PROVIDER_TYPE = {
     "local": provider_type.local,
@@ -34,4 +34,9 @@ export const TASK_PRIORITY = {
     "low": task_priority.low,
     "high": task_priority.high,
     "critical": task_priority.critical,
+} as const;
+
+export const USER_TYPE = {
+    "admin": user_type.admin,
+    "user": user_type.user
 } as const;

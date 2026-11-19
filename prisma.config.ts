@@ -9,6 +9,7 @@ export default defineConfig({
   },
 
   datasource: {
+    // replace it into PRISMA_DATABASE_URL in .env file for database table update
     url: env("DATABASE_URL"),
   },
 });

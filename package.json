@@ -15,6 +15,7 @@
     "drop-schema": "npx prisma migrate reset --force",
     "migrate:deploy": "npx prisma migrate deploy",
     "applied-latest-migration": "npx prisma migrate resolve --applied $(ls -1 prisma/migrations | sort | tail -n 1)",
+    "db-pull-dev": "npx prisma db pull",
     "db-push-dev": "npx prisma db push"
   },
   "keywords": [],

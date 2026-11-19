@@ -157,7 +157,8 @@ exports.Prisma.UsersScalarFieldEnum = {
   username: 'username',
   password: 'password',
   provider: 'provider',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  user_type: 'user_type'
 };
 
 exports.Prisma.SortOrder = {
@@ -196,6 +197,11 @@ exports.provider_type = exports.$Enums.provider_type = {
   local: 'local',
   facebook: 'facebook',
   googlefb_and_google: 'googlefb_and_google'
+};
+
+exports.user_type = exports.$Enums.user_type = {
+  admin: 'admin',
+  user: 'user'
 };
 
 exports.Prisma.ModelName = {

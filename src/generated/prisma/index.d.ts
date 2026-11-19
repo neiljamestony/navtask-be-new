@@ -73,6 +73,14 @@ export const task_status: {
 
 export type task_status = (typeof task_status)[keyof typeof task_status]
 
+
+export const user_type: {
+  admin: 'admin',
+  user: 'user'
+};
+
+export type user_type = (typeof user_type)[keyof typeof user_type]
+
 }
 
 export type provider_type = $Enums.provider_type
@@ -90,6 +98,10 @@ export const task_priority: typeof $Enums.task_priority
 export type task_status = $Enums.task_status
 
 export const task_status: typeof $Enums.task_status
+
+export type user_type = $Enums.user_type
+
+export const user_type: typeof $Enums.user_type
 
 /**
  * ##  Prisma Client ʲˢ
@@ -4749,6 +4761,7 @@ export namespace Prisma {
     password: string | null
     provider: $Enums.provider_type | null
     created_at: Date | null
+    user_type: $Enums.user_type | null
   }
 
   export type UsersMaxAggregateOutputType = {
@@ -4757,6 +4770,7 @@ export namespace Prisma {
     password: string | null
     provider: $Enums.provider_type | null
     created_at: Date | null
+    user_type: $Enums.user_type | null
   }
 
   export type UsersCountAggregateOutputType = {
@@ -4765,6 +4779,7 @@ export namespace Prisma {
     password: number
     provider: number
     created_at: number
+    user_type: number
     _all: number
   }
 
@@ -4783,6 +4798,7 @@ export namespace Prisma {
     password?: true
     provider?: true
     created_at?: true
+    user_type?: true
   }
 
   export type UsersMaxAggregateInputType = {
@@ -4791,6 +4807,7 @@ export namespace Prisma {
     password?: true
     provider?: true
     created_at?: true
+    user_type?: true
   }
 
   export type UsersCountAggregateInputType = {
@@ -4799,6 +4816,7 @@ export namespace Prisma {
     password?: true
     provider?: true
     created_at?: true
+    user_type?: true
     _all?: true
   }
 
@@ -4894,6 +4912,7 @@ export namespace Prisma {
     password: string
     provider: $Enums.provider_type | null
     created_at: Date | null
+    user_type: $Enums.user_type | null
     _count: UsersCountAggregateOutputType | null
     _avg: UsersAvgAggregateOutputType | null
     _sum: UsersSumAggregateOutputType | null
@@ -4921,6 +4940,7 @@ export namespace Prisma {
     password?: boolean
     provider?: boolean
     created_at?: boolean
+    user_type?: boolean
     task?: boolean | users$taskArgs<ExtArgs>
     _count?: boolean | UsersCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["users"]>
@@ -4931,6 +4951,7 @@ export namespace Prisma {
     password?: boolean
     provider?: boolean
     created_at?: boolean
+    user_type?: boolean
   }, ExtArgs["result"]["users"]>
 
   export type usersSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4939,6 +4960,7 @@ export namespace Prisma {
     password?: boolean
     provider?: boolean
     created_at?: boolean
+    user_type?: boolean
   }, ExtArgs["result"]["users"]>
 
   export type usersSelectScalar = {
@@ -4947,9 +4969,10 @@ export namespace Prisma {
     password?: boolean
     provider?: boolean
     created_at?: boolean
+    user_type?: boolean
   }
 
-  export type usersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "password" | "provider" | "created_at", ExtArgs["result"]["users"]>
+  export type usersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "password" | "provider" | "created_at" | "user_type", ExtArgs["result"]["users"]>
   export type usersInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     task?: boolean | users$taskArgs<ExtArgs>
     _count?: boolean | UsersCountOutputTypeDefaultArgs<ExtArgs>
@@ -4968,6 +4991,7 @@ export namespace Prisma {
       password: string
       provider: $Enums.provider_type | null
       created_at: Date | null
+      user_type: $Enums.user_type | null
     }, ExtArgs["result"]["users"]>
     composites: {}
   }
@@ -5397,6 +5421,7 @@ export namespace Prisma {
     readonly password: FieldRef<"users", 'String'>
     readonly provider: FieldRef<"users", 'provider_type'>
     readonly created_at: FieldRef<"users", 'DateTime'>
+    readonly user_type: FieldRef<"users", 'user_type'>
   }
     
 
@@ -5892,7 +5917,8 @@ export namespace Prisma {
     username: 'username',
     password: 'password',
     provider: 'provider',
-    created_at: 'created_at'
+    created_at: 'created_at',
+    user_type: 'user_type'
   };
 
   export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
@@ -6036,6 +6062,20 @@ export namespace Prisma {
    * Reference to a field of type 'provider_type[]'
    */
   export type ListEnumprovider_typeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'provider_type[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'user_type'
+   */
+  export type Enumuser_typeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'user_type'>
+    
+
+
+  /**
+   * Reference to a field of type 'user_type[]'
+   */
+  export type ListEnumuser_typeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'user_type[]'>
     
 
 
@@ -6282,6 +6322,7 @@ export namespace Prisma {
     password?: StringFilter<"users"> | string
     provider?: Enumprovider_typeNullableFilter<"users"> | $Enums.provider_type | null
     created_at?: DateTimeNullableFilter<"users"> | Date | string | null
+    user_type?: Enumuser_typeNullableFilter<"users"> | $Enums.user_type | null
     task?: TaskListRelationFilter
   }
 
@@ -6291,6 +6332,7 @@ export namespace Prisma {
     password?: SortOrder
     provider?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
+    user_type?: SortOrderInput | SortOrder
     task?: taskOrderByRelationAggregateInput
   }
 
@@ -6303,6 +6345,7 @@ export namespace Prisma {
     password?: StringFilter<"users"> | string
     provider?: Enumprovider_typeNullableFilter<"users"> | $Enums.provider_type | null
     created_at?: DateTimeNullableFilter<"users"> | Date | string | null
+    user_type?: Enumuser_typeNullableFilter<"users"> | $Enums.user_type | null
     task?: TaskListRelationFilter
   }, "id" | "username">
 
@@ -6312,6 +6355,7 @@ export namespace Prisma {
     password?: SortOrder
     provider?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
+    user_type?: SortOrderInput | SortOrder
     _count?: usersCountOrderByAggregateInput
     _avg?: usersAvgOrderByAggregateInput
     _max?: usersMaxOrderByAggregateInput
@@ -6328,6 +6372,7 @@ export namespace Prisma {
     password?: StringWithAggregatesFilter<"users"> | string
     provider?: Enumprovider_typeNullableWithAggregatesFilter<"users"> | $Enums.provider_type | null
     created_at?: DateTimeNullableWithAggregatesFilter<"users"> | Date | string | null
+    user_type?: Enumuser_typeNullableWithAggregatesFilter<"users"> | $Enums.user_type | null
   }
 
   export type attachmentsCreateInput = {
@@ -6558,6 +6603,7 @@ export namespace Prisma {
     password: string
     provider?: $Enums.provider_type | null
     created_at?: Date | string | null
+    user_type?: $Enums.user_type | null
     task?: taskCreateNestedManyWithoutUsersInput
   }
 
@@ -6567,6 +6613,7 @@ export namespace Prisma {
     password: string
     provider?: $Enums.provider_type | null
     created_at?: Date | string | null
+    user_type?: $Enums.user_type | null
     task?: taskUncheckedCreateNestedManyWithoutUsersInput
   }
 
@@ -6575,6 +6622,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     provider?: NullableEnumprovider_typeFieldUpdateOperationsInput | $Enums.provider_type | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user_type?: NullableEnumuser_typeFieldUpdateOperationsInput | $Enums.user_type | null
     task?: taskUpdateManyWithoutUsersNestedInput
   }
 
@@ -6584,6 +6632,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     provider?: NullableEnumprovider_typeFieldUpdateOperationsInput | $Enums.provider_type | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user_type?: NullableEnumuser_typeFieldUpdateOperationsInput | $Enums.user_type | null
     task?: taskUncheckedUpdateManyWithoutUsersNestedInput
   }
 
@@ -6593,6 +6642,7 @@ export namespace Prisma {
     password: string
     provider?: $Enums.provider_type | null
     created_at?: Date | string | null
+    user_type?: $Enums.user_type | null
   }
 
   export type usersUpdateManyMutationInput = {
@@ -6600,6 +6650,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     provider?: NullableEnumprovider_typeFieldUpdateOperationsInput | $Enums.provider_type | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user_type?: NullableEnumuser_typeFieldUpdateOperationsInput | $Enums.user_type | null
   }
 
   export type usersUncheckedUpdateManyInput = {
@@ -6608,6 +6659,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     provider?: NullableEnumprovider_typeFieldUpdateOperationsInput | $Enums.provider_type | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user_type?: NullableEnumuser_typeFieldUpdateOperationsInput | $Enums.user_type | null
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -6997,6 +7049,13 @@ export namespace Prisma {
     not?: NestedEnumprovider_typeNullableFilter<$PrismaModel> | $Enums.provider_type | null
   }
 
+  export type Enumuser_typeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.user_type | Enumuser_typeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.user_type[] | ListEnumuser_typeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.user_type[] | ListEnumuser_typeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumuser_typeNullableFilter<$PrismaModel> | $Enums.user_type | null
+  }
+
   export type TaskListRelationFilter = {
     every?: taskWhereInput
     some?: taskWhereInput
@@ -7013,6 +7072,7 @@ export namespace Prisma {
     password?: SortOrder
     provider?: SortOrder
     created_at?: SortOrder
+    user_type?: SortOrder
   }
 
   export type usersAvgOrderByAggregateInput = {
@@ -7025,6 +7085,7 @@ export namespace Prisma {
     password?: SortOrder
     provider?: SortOrder
     created_at?: SortOrder
+    user_type?: SortOrder
   }
 
   export type usersMinOrderByAggregateInput = {
@@ -7033,6 +7094,7 @@ export namespace Prisma {
     password?: SortOrder
     provider?: SortOrder
     created_at?: SortOrder
+    user_type?: SortOrder
   }
 
   export type usersSumOrderByAggregateInput = {
@@ -7047,6 +7109,16 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumprovider_typeNullableFilter<$PrismaModel>
     _max?: NestedEnumprovider_typeNullableFilter<$PrismaModel>
+  }
+
+  export type Enumuser_typeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.user_type | Enumuser_typeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.user_type[] | ListEnumuser_typeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.user_type[] | ListEnumuser_typeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumuser_typeNullableWithAggregatesFilter<$PrismaModel> | $Enums.user_type | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumuser_typeNullableFilter<$PrismaModel>
+    _max?: NestedEnumuser_typeNullableFilter<$PrismaModel>
   }
 
   export type taskCreateNestedOneWithoutAttachmentsInput = {
@@ -7231,6 +7303,10 @@ export namespace Prisma {
 
   export type NullableEnumprovider_typeFieldUpdateOperationsInput = {
     set?: $Enums.provider_type | null
+  }
+
+  export type NullableEnumuser_typeFieldUpdateOperationsInput = {
+    set?: $Enums.user_type | null
   }
 
   export type taskUpdateManyWithoutUsersNestedInput = {
@@ -7518,6 +7594,13 @@ export namespace Prisma {
     not?: NestedEnumprovider_typeNullableFilter<$PrismaModel> | $Enums.provider_type | null
   }
 
+  export type NestedEnumuser_typeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.user_type | Enumuser_typeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.user_type[] | ListEnumuser_typeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.user_type[] | ListEnumuser_typeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumuser_typeNullableFilter<$PrismaModel> | $Enums.user_type | null
+  }
+
   export type NestedEnumprovider_typeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.provider_type | Enumprovider_typeFieldRefInput<$PrismaModel> | null
     in?: $Enums.provider_type[] | ListEnumprovider_typeFieldRefInput<$PrismaModel> | null
@@ -7526,6 +7609,16 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumprovider_typeNullableFilter<$PrismaModel>
     _max?: NestedEnumprovider_typeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumuser_typeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.user_type | Enumuser_typeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.user_type[] | ListEnumuser_typeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.user_type[] | ListEnumuser_typeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumuser_typeNullableWithAggregatesFilter<$PrismaModel> | $Enums.user_type | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumuser_typeNullableFilter<$PrismaModel>
+    _max?: NestedEnumuser_typeNullableFilter<$PrismaModel>
   }
 
   export type taskCreateWithoutAttachmentsInput = {
@@ -7723,6 +7816,7 @@ export namespace Prisma {
     password: string
     provider?: $Enums.provider_type | null
     created_at?: Date | string | null
+    user_type?: $Enums.user_type | null
   }
 
   export type usersUncheckedCreateWithoutTaskInput = {
@@ -7731,6 +7825,7 @@ export namespace Prisma {
     password: string
     provider?: $Enums.provider_type | null
     created_at?: Date | string | null
+    user_type?: $Enums.user_type | null
   }
 
   export type usersCreateOrConnectWithoutTaskInput = {
@@ -7812,6 +7907,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     provider?: NullableEnumprovider_typeFieldUpdateOperationsInput | $Enums.provider_type | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user_type?: NullableEnumuser_typeFieldUpdateOperationsInput | $Enums.user_type | null
   }
 
   export type usersUncheckedUpdateWithoutTaskInput = {
@@ -7820,6 +7916,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     provider?: NullableEnumprovider_typeFieldUpdateOperationsInput | $Enums.provider_type | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user_type?: NullableEnumuser_typeFieldUpdateOperationsInput | $Enums.user_type | null
   }
 
   export type taskCreateWithoutUsersInput = {

@@ -106,7 +106,8 @@ export const login = async (req: Request, res: Response) => {
                     errors: [],
                     data: {
                         userId: user.id,
-                        username: user.username
+                        username: user.username,
+                        userType: user.user_type,
                     }
                 })
             }
@@ -126,7 +127,8 @@ export const hasAccess = async (req: Request, res: Response) => {
             res.json({
                 data: {
                     id: result.id,
-                    username: result.username
+                    username: result.username,
+                    userType: result.user_type
                 },
                 errors: [],
                 status: 200,
@@ -149,7 +151,8 @@ export const getUserInfo = async (req: Request, res: Response) => {
             res.json({
                 data: {
                     userId: result.id,
-                    username: result.username
+                    username: result.username,
+                    userType: result.user_type
                 },
                 errors: [],
                 status: 200,
